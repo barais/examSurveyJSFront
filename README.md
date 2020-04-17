@@ -140,9 +140,10 @@ console.log(JSON.stringify(exam));
 
 ```
 
-The following json will build the following survey
+The following json will build the following exam
 
-![](doc/screenshot.png)
+![capture](doc/capture.png)
+
 
 In general, surveyjs library is highly configurable, please read the [documentation](https://surveyjs.io/Documentation/Library) and [examples](https://surveyjs.io/Examples/Library) to find out how to create your exam. SurveyJS provide also a [creator](https://surveyjs.io/Overview/Survey-Creator): It is an online visual survey creator and form builder. You can export the json file of your exam at the end. 
 
