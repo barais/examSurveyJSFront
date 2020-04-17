@@ -1,0 +1,14 @@
+{
+    "/upload": {
+    "target": "http://localhost:8084",
+    "secure": false
+    },
+    "/casusername": {
+      "target": "http://localhost:8084",
+      "secure": false
+      },
+      "/exam.json": {
+        "target": "http://localhost:8084",
+        "secure": false
+        }
+}
