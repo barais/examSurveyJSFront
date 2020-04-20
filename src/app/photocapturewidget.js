@@ -64,8 +64,6 @@ function init(Survey) {
               audio: false
             },
             function(stream) {
-              console.log(video);
-              console.log(question);
               video.srcObject = stream;
               video.play();
               question.video = video;
@@ -118,7 +116,6 @@ function init(Survey) {
           }, false);
 
           sendbutton.addEventListener('click', function(ev){
-            console.log('toto');
             sendpicture();
             ev.preventDefault();
           }, false);
