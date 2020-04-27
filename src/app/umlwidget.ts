@@ -1,8 +1,9 @@
-const pako = require('pako');
+import * as Survey from 'survey-angular';
+import * as pako from 'pako';
+//const pako = require('pako');
 
-
-function init(Survey, $) {
-  $ = $ || window.$;
+function init(Survey: any, $: any) {
+  $ = $ || (window as any).$ ;
 
   var widget = {
     name: "uml",
@@ -12,11 +13,11 @@ function init(Survey, $) {
         return true;
  //     return typeof Slider !== "undefined";
     },
-    isFit: function(question) {
+    isFit: function(question: any) {
       return question.getType() === "uml";
     },
-    htmlTemplate: '<div class="container"><div class="row"><div class="col"><textarea></textarea>Utilisez <a href="https://liveuml.com/">liveuml</a> comme éditeur, puis copier le text directement dans ce textarea</div><div class="col"><div class="output"><img id="photo" alt="The screen capture will appear in this box."><button id="sendbutton">Select this diagram</button></div></div></div>',
-    activatedByChanged: function(activatedBy) {
+    htmlTemplate: '<div class="container"><div class="row"><div class="col"><textarea></textarea>Utilisez <a href="https://liveuml.com/" target="_blank">liveuml</a> comme éditeur, puis copier le text directement dans ce textarea</div><div class="col"><div class="output"><img id="photo" alt="The screen capture will appear in this box."><button id="sendbutton">Select this diagram</button></div></div></div>',
+    activatedByChanged: function(activatedBy: any) {
       Survey.JsonObject.metaData.addClass("uml", [], null, "empty");
       Survey.JsonObject.metaData.addProperties("uml", [
        /*{
@@ -29,7 +30,7 @@ function init(Survey, $) {
         }*/
       ]);
     },
-    afterRender: function(question, el) {
+    afterRender: function(question: any, el: any) {
       //el.firstChild.firstChild.firstChild.value ='toto';
       var textArea = el.firstChild.firstChild.firstChild;
       var photo = el.firstChild.childNodes[1].firstChild.firstChild;
@@ -45,7 +46,7 @@ function init(Survey, $) {
       });
 
 
-      function encode64(data) {
+      function encode64(data: any) {
         var r = "";
         for (var i=0; i<data.length; i+=3) {
          if (i+2==data.length) {
@@ -59,7 +60,7 @@ function init(Survey, $) {
        return r;
        }
 
-       function append3bytes(b1, b2, b3) {
+       function append3bytes(b1:any, b2:any, b3:any) {
        var c1 = b1 >> 2;
        var c2 = ((b1 & 0x3) << 4) | (b2 >> 4);
        var c3 = ((b2 & 0xF) << 2) | (b3 >> 6);
@@ -72,7 +73,7 @@ function init(Survey, $) {
        return r;
        }
 
-       function encode6bit(b) {
+       function encode6bit(b:any) {
        if (b < 10) {
         return String.fromCharCode(48 + b);
        }
@@ -94,15 +95,15 @@ function init(Survey, $) {
        return '?';
        }
     },
-    willUnmount: function(question, el) {
+    willUnmount: function(question: any, el: any) {
     }
   };
 
   Survey.CustomWidgetCollection.Instance.addCustomWidget(widget, "customtype");
 }
 
-if (typeof Survey !== "undefined") {
-  init(Survey);
+if ( Survey !== null) {
+  init(Survey, (window as any).$);
 }
 
 export default init;

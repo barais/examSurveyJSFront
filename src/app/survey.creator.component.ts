@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import * as SurveyKo from "survey-knockout";
 import * as SurveyCreator from "survey-creator";
-import * as widgets from "surveyjs-widgets";
+import * as widgets from 'surveyjs-widgets';
 import { init as initCustomWidget } from "./customwidget";
 
 import "inputmask/dist/inputmask/phone-codes/phone.js";
@@ -24,18 +24,18 @@ initCustomWidget(SurveyKo);
 SurveyCreator.StylesManager.applyTheme("default");
 
 var CkEditor_ModalEditor = {
-  afterRender: function(modalEditor, htmlElement) {
-    var editor = window["CKEDITOR"].replace(htmlElement);
+  afterRender: function(modalEditor: any, htmlElement: any) {
+    var editor = ((window as any).CKEDITOR as any).replace(htmlElement);
     editor.on("change", function() {
       modalEditor.editingValue = editor.getData();
     });
     editor.setData(modalEditor.editingValue);
   },
-  destroy: function(modalEditor, htmlElement) {
-    var instance = window["CKEDITOR"].instances[htmlElement.id];
+  destroy: function(modalEditor: any, htmlElement: any) {
+    var instance = ((window as any).CKEDITOR as any).instances[htmlElement.id];
     if (instance) {
       instance.removeAllListeners();
-      window["CKEDITOR"].remove(instance);
+      ((window as any).CKEDITOR as any).remove(instance);
     }
   }
 };
@@ -51,9 +51,19 @@ SurveyCreator.SurveyPropertyModalEditor.registerCustomWidget(
   `
 })
 export class SurveyCreatorComponent {
-  surveyCreator: SurveyCreator.SurveyCreator;
+  surveyCreator: SurveyCreator.SurveyCreator ;
   @Input() json: any;
   @Output() surveySaved: EventEmitter<Object> = new EventEmitter();
+
+  constructor(){
+    const options = { showEmbededSurveyTab: true, generateValidJSON: true };
+    this.surveyCreator = new SurveyCreator.SurveyCreator(
+      "surveyCreatorContainer",
+      options
+    );
+
+  }
+
   ngOnInit() {
     SurveyKo.JsonObject.metaData.addProperty(
       "questionbase",
@@ -61,11 +71,6 @@ export class SurveyCreatorComponent {
     );
     SurveyKo.JsonObject.metaData.addProperty("page", "popupdescription:text");
 
-    let options = { showEmbededSurveyTab: true, generateValidJSON: true };
-    this.surveyCreator = new SurveyCreator.SurveyCreator(
-      "surveyCreatorContainer",
-      options
-    );
     this.surveyCreator.text = JSON.stringify(this.json);
     this.surveyCreator.saveSurveyFunc = this.saveMySurvey;
   }

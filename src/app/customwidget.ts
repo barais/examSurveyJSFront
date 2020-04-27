@@ -12,7 +12,7 @@ export function init(Survey: any) {
       return true; //we do not require anything so we just return true.
     },
     //SurveyJS library calls this function for every question to check, if it should use this widget instead of default rendering/behavior
-    isFit: function (question) {
+    isFit: function (question: any) {
       //we return true if the type of question is textwithbutton
       return question.getType() === "textwithbutton";
       //the following code will activate the widget for a text question with inputType equals to date
@@ -23,7 +23,7 @@ export function init(Survey: any) {
     //property - it means that it will activated if a property of the existing question type is set to particular value, for example inputType = "date"
     //type - you are changing the behaviour of entire question type. For example render radiogroup question differently, have a fancy radio buttons
     //customType - you are creating a new type, like in our example "textwithbutton"
-    activatedByChanged: function (activatedBy) {
+    activatedByChanged: function (activatedBy: any) {
       //we do not need to check acticatedBy parameter, since we will use our widget for customType only
       //We are creating a new class and derived it from text question type. It means that text model (properties and fuctions) will be available to us
       Survey.JsonObject.metaData.addClass("textwithbutton", [], null, "text");
@@ -41,7 +41,7 @@ export function init(Survey: any) {
     //You should use it if your set the isDefaultRender to false
     htmlTemplate: "<div><input /><button></button></div>",
     //The main function, rendering and two-way binding
-    afterRender: function (question, el) {
+    afterRender: function (question: any, el: any) {
       //el is our root element in htmlTemplate, is "div" in our case
       //get the text element
       var text = el.getElementsByTagName("input")[0];
@@ -81,7 +81,7 @@ export function init(Survey: any) {
       onReadOnlyChangedCallback();
     },
     //Use it to destroy the widget. It is typically needed by jQuery widgets
-    willUnmount: function (question, el) {
+    willUnmount: function (question: any, el: any) {
       //We do not need to clear anything in our simple example
       //Here is the example to destroy the image picker
       //var $el = $(el).find("select");

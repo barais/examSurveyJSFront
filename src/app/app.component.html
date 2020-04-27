@@ -9,4 +9,4 @@
   </ul>
 
 </nav>
-<survey  (submitSurvey)="sendData($event)"></survey>
+<survey [json]="json" (submitSurvey)="sendData($event)"></survey>

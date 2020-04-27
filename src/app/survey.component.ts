@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output, OnInit } from "@angular/core";
 import * as Survey from "survey-angular";
-import * as widgets from "surveyjs-widgets";
+import * as widgets from 'surveyjs-widgets';
 import * as SurveyCore from "survey-core";
 import * as SurveyPDF from "survey-pdf";
 import "inputmask/dist/inputmask/phone-codes/phone.js";
@@ -10,7 +10,10 @@ import { init as initCustomWidget } from "./customwidget";
 import * as showdown from 'showdown';
 
 import showdownHighlight from 'showdown-highlight';
-import * as ownwidgets from './ownwidgets.js';
+
+import * as photocapture from './photocapturewidget';
+import * as uml from './umlwidget';
+
 import { HttpClient } from '@angular/common/http';
 
 
@@ -44,8 +47,8 @@ widgets.autocomplete(SurveyCore);
 widgets.bootstrapslider(SurveyCore);
 widgets.prettycheckbox(SurveyCore);
 
-ownwidgets.photocapture(Survey);
-ownwidgets.uml(Survey);
+photocapture.default(Survey);
+uml.default(Survey, (window as any).$);
 
 
 Survey.JsonObject.metaData.addProperty('questionbase', 'popupdescription:text');
@@ -61,34 +64,45 @@ Survey.StylesManager.applyTheme("default");
 export class SurveyComponent implements OnInit {
   @Output() submitSurvey = new EventEmitter<any>();
   @Input()
-  json: object;
+  json: object | undefined;
   result: any;
-
+  converter: showdown.Converter
   constructor(private http: HttpClient) {
+    this.converter = new showdown.Converter({
+      extensions: [showdownHighlight]
+    }
+    );
 
 
   }
 
 
   ngOnInit() {
-    const converter = new showdown.Converter({
-      extensions: [showdownHighlight]
-    }
-    );
     //    console.log(showdownHighlight);
+
+    if (this.json === {}){
 
     this.http.get('/exam.json').subscribe(data => {
       this.json = data;
+      this.initFromJSON();
 
+          });
+        }else{
+          this.initFromJSON();
 
-      const surveyModel = new Survey.Model(this.json);
+        }
+
+  }
+
+  initFromJSON(){
+    const surveyModel = new Survey.Model(this.json);
       surveyModel
         .onTextMarkdown
         .add((survey, options) => {
           //convert the mardown text to html
           // console.log(options.text);
 
-          var str = converter.makeHtml(options.text) as string;
+          var str = this.converter.makeHtml(options.text) as string;
           //remove root paragraphs <p></p>
           if (!str.startsWith('<p>')) {
           } else {
@@ -121,8 +135,9 @@ export class SurveyComponent implements OnInit {
           this.result = result.data;
         }
         );
+      // Survey.SurveyNG.locale="fr";
+
       Survey.SurveyNG.render('surveyElement', { model: surveyModel });
-    });
 
   }
   /*savePDF() {
